@@ -1,0 +1,9 @@
+{
+  "name": "com.chsheahan.procedural-mines.core",
+  "version": "0.1.0",
+  "displayName": "Procedural Mines Core",
+  "description": "Engine-independent seeded cavern volumes and surface extraction.",
+  "unity": "6000.0",
+  "license": "MIT",
+  "author": { "name": "Christopher Hugh Sheahan" }
+}

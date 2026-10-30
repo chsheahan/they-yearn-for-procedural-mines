@@ -1,0 +1,10 @@
+{
+  "name": "ProceduralMines.SampleEditor",
+  "references": [
+    "ProceduralMines.Core",
+    "ProceduralMines.Unity",
+    "UnityEditor.TestRunner",
+    "UnityEngine.TestRunner"
+  ],
+  "includePlatforms": ["Editor"]
+}

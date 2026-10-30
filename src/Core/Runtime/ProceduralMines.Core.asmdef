@@ -1,0 +1,5 @@
+{
+  "name": "ProceduralMines.Core",
+  "rootNamespace": "ProceduralMines.Core",
+  "noEngineReferences": true
+}

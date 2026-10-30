@@ -1,7 +1,13 @@
 # Generation core
 
-Reserved for engine-independent C# generation code.
+A Unity-free C# library targeting .NET Standard 2.1 and a local Unity package.
 
-Planned responsibilities: settings validation, seeded chamber layout, passage planning, cave volume sampling, surface mesh data, and geometry validation.
+```csharp
+var volume = new CavernVolume(new CavernSettings { Seed = 1337 });
+var mesh = SurfaceMesher.Generate(volume);
+// Plain Vec3[] vertices/normals and int[] triangle indices.
+```
 
-No implementation or build project exists yet. Choose a Unity-compatible target before adding project files. Keep this code free of UnityEngine dependencies.
+`CavernVolume` snapshots settings. `Sample` is positive inside air and negative in rock; `GetRoute` exposes the required walking route.
+
+Build with `dotnet build src/Core/ProceduralMines.Core.csproj`, or import this folder as a Unity package. No external .NET dependencies are required. The root `Directory.Build.props` keeps .NET build artifacts outside package folders.

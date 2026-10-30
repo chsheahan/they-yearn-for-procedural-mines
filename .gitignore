@@ -107,3 +107,21 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# The sample is a nested Unity project; the core/check projects are handwritten.
+/samples/TwoChambers/[Ll]ibrary/
+/samples/TwoChambers/[Tt]emp/
+/samples/TwoChambers/[Oo]bj/
+/samples/TwoChambers/[Ll]ogs/
+/samples/TwoChambers/[Uu]ser[Ss]ettings/
+/samples/TwoChambers/[Bb]uild*/
+/samples/TwoChambers/MemoryCaptures/
+/samples/TwoChambers/.vs/
+/samples/TwoChambers/*.csproj
+/samples/TwoChambers/*.sln*
+**/bin/
+**/obj/
+!src/Core/ProceduralMines.Core.csproj
+!tests/CoreChecks/CoreChecks.csproj
+/TestResults/
+/artifacts/
