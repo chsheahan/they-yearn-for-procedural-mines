@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <!-- Keep compiled .NET files outside the folders imported as Unity packages. -->
+    <BaseOutputPath>$(MSBuildThisFileDirectory)artifacts/$(MSBuildProjectName)/bin/</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)artifacts/$(MSBuildProjectName)/obj/</BaseIntermediateOutputPath>
+  </PropertyGroup>
+</Project>

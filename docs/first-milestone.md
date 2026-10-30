@@ -1,40 +1,38 @@
 # Milestone 1: two chambers and a passage
 
+Tracking: [issue #1](https://github.com/chsheahan/they-yearn-for-procedural-mines/issues/1).
+
 ## Outcome
 
-A developer can open a documented Unity project, generate two cavern chambers at different elevations from a seed, and walk from one to the other.
-
-Current status: not implemented.
+Generate two chambers at different elevations from a seed and walk between them in Unity 6000.4.0f1.
 
 ## Acceptance criteria
 
-- The repository documents the exact Unity Editor version and setup steps.
-- The sample generates two distinct chambers and a connecting passage.
-- Both chambers provide usable floor space.
-- The required route supports the documented player capsule, clearance, maximum slope, and step allowance.
-- Traversal requires no jumping, climbing, or falling.
-- Floors, walls, and ceilings have collision without blocking the intended route.
-- The same seed, settings, and generator version reproduce the geometry in the supported environment.
-- A debug view shows chamber locations and the route.
-- Invalid settings produce actionable validation errors.
-- The sample reports generation duration and mesh vertex/triangle counts.
+- Document the exact Editor version and setup.
+- Provide usable floor space in both chambers.
+- Support the configured capsule, clearance, slope limit, and step allowance along the required route.
+- Require no jumping, climbing, or falling.
+- Provide floor/wall/ceiling collision without blocking the route.
+- Reproduce geometry with the same seed/settings/algorithm/runtime.
+- Display the route, chamber debug information, geometry counts, and generation duration.
+- Report invalid settings with actionable errors.
 
-## Implementation order
+## Implemented scope
 
-1. Pin the Unity Editor version and compatible C#/.NET targets.
-2. Establish the core data model and Unity adapter boundary.
-3. Generate simple chamber volumes and a conservative sloped passage.
-4. Extract and display their surface with collision.
-5. Add an exploration controller and verify the route in Play Mode.
-6. Add seeded variation while preserving traversal constraints.
-7. Document reproduction steps and capture the working demo.
+Two chamber volumes, a curved passage, smooth descent, seeded surface variation, an engine-independent mesher, Unity rendering/collision, first-person movement, settings controls, route debug display, reset, diagnostics, core checks, and Play Mode tests.
 
-## Verification plan
+See [verification](verification.md) for completed runs and test limits.
 
-Add focused checks for repeatability, invalid settings, valid mesh indices, and route constraints. Exercise more than one seed. Use Unity Play Mode to check actual controller traversal and collision; core-level connectivity checks alone are insufficient.
+## Default traversal contract
 
-Choose numeric dimensions, seed coverage, and performance budgets during the first implementation pass and record them with the results.
+| Setting | Value |
+| --- | --- |
+| Distance / descent | 46 m / 6 m |
+| Capsule radius / height | 0.4 m / 1.8 m |
+| Clearance | 0.25 m plus two cells of meshing margin |
+| Slope / step allowance | 30 degrees / 0.25 m |
+| Cell size | 0.8 m |
 
 ## Deferred
 
-Flora and fauna, resources, mining, destructible terrain, persistent edits, infinite worlds, chunk streaming, multiplayer, constructed settlements, and a node editor.
+General cave graphs, fully organic floors, flora/fauna, resources, mining, destruction, persistent edits, infinite worlds, streaming, multiplayer, settlements, and a node editor.

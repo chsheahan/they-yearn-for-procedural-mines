@@ -1,45 +1,51 @@
-# Proposed architecture
+# Initial architecture
 
-This document records the initial direction; it does not describe an implemented system.
+## Boundaries
 
-## Core
+`src/Core` is a .NET Standard 2.1 library and a local Unity package. Its assembly explicitly has no engine references. `src/Unity` consumes plain core data and owns meshes, collision, exploration, lighting, and editor tools. The sample references both packages by relative path.
 
-The core must not depend on UnityEngine. It owns generation settings, seeded randomness, chamber and route descriptions, density sampling, mesh data, and validation results.
-
-Use a bounded three-dimensional density field to represent solid rock and empty cave space. A surface extraction algorithm will convert that field to vertices and triangles. The specific meshing algorithm is an implementation decision to validate with the first prototype.
-
-Keep generation settings and algorithm version alongside the seed. Repeatability is initially scoped to the same generator version and supported runtime; cross-platform bit-for-bit equivalence is not promised.
-
-## Unity integration
-
-Unity adapters translate core mesh data into Unity meshes and colliders, expose settings, draw debug information, and construct the sample scene. Unity-specific materials, lighting, input, and player movement belong here or in the sample.
+Coordinates use metres, Y up, and X along the descent. Positive density means cave air; negative density means solid rock. Normals and triangle winding face cave air.
 
 ## Pipeline
 
-1. Validate settings and generation bounds.
-2. Place two chambers and plan a route between their usable floor areas.
-3. Build chamber and tunnel volumes with protected floor and clearance envelopes.
-4. Add bounded shape variation outside the protected route.
-5. Sample the density field and extract surface geometry.
-6. Validate mesh and route constraints; report failures rather than silently producing an inaccessible result.
-7. Build the Unity scene and verify traversal using the sample player controller.
+1. Validate finite settings, dimensions, slope, and headroom.
+2. Snapshot settings and derive seed-dependent wave phases/passage bend using an explicit integer PRNG.
+3. Combine two stretched chamber volumes and one arched passage.
+4. Clip all empty space to a common floor: level at the ends, smoothly descending between them.
+5. Protect a continuous route envelope including capsule dimensions, clearance, and two cells of meshing margin. Organic shape variation cannot fill it.
+6. Sample the bounded density grid and extract the zero surface with six consistent tetrahedra per cell.
+7. Create the Unity mesh, static non-convex MeshCollider, procedural material, fixed light set, and optional player.
 
-Coordinate conventions and measurement units must be specified before implementing the adapters.
+Connectivity is currently exactly two endpoints and one connection. General graphs, branching, and fully organic floors are deferred.
 
-## Walkability
+## Meshing
 
-Graph connectivity is a planning property. Walkability also depends on floor continuity, slope, clearance, collision geometry, and controller behavior.
+The marching-tetrahedra implementation uses no third-party lookup table. Intersections share vertices by lattice-edge identity. Exact-zero samples share a lattice-vertex key; near-zero values are snapped to avoid floating-point floor slivers. Density gradients orient surfaces inward.
 
-Define a player capsule radius and height, a clearance margin, maximum slope, and step allowance. Protect the full swept player volume along required routes. Check the meshed and collidable result because sampling can introduce obstacles or gaps.
+Generation is capped at 2.5 million density samples. Individually valid settings can still exceed the combined budget; generation reports an error before allocating the grid. Unity meshes use 32-bit indices.
 
-Start with a conservative ramp between elevations. Jumps, ladders, climbing, and mandatory drops are outside the first milestone.
+## Traversal
 
-## Performance and future editing
+A connected volume alone does not establish walkability. The required route uses continuous floors, bounded slope, and a protected clearance envelope. There are no mandatory jumps, climbs, or drops.
 
-Use a small configurable generation volume and explicit resolution limits. Record generation duration and mesh size in the prototype before setting performance budgets.
+Play Mode tests exercise the actual CharacterController in both directions across three seeds. This checks a central route with default settings, not every chamber edge or every possible configuration. Near chamber boundaries, floors may narrow into walls.
 
-Keep cave volume data separate from mesh output. This enables later experiments with local edits, but the first milestone does not implement destruction, streaming, save formats, or partial rebuilds.
+## Lifecycle
 
-## Dependencies
+The saved scene contains a generator. Play creates the environment; Inspector previews are temporary and excluded from scene serialization.
 
-Start with Unity's built-in rendering and physics capabilities and our own generation code. A small noise dependency can be evaluated when surface variation is needed. Do not adopt a full terrain framework before the basic cavern pipeline is demonstrated.
+Regeneration builds valid core data before retiring current generated objects. Old geometry is immediately disabled before deferred destruction. Meshes/materials are released on replacement or teardown, and ambient/fog settings are restored.
+
+The demo requires an identity world transform to preserve metre-based capsule/clearance constraints.
+
+## Repeatability and future editing
+
+`CavernVolume.AlgorithmVersion` identifies the algorithm. Same-version/settings/runtime output is tested. Cross-runtime bitwise equality and stable seeds across future versions are not promised.
+
+The volume remains independent of mesh output. There is no writable voxel store, edit persistence, chunk model, partial remeshing, or mining in this milestone.
+
+## Rendering and performance
+
+The sample targets Unity 6000.4.0f1's Built-in Render Pipeline, with a world-space rock shader, ambient light, a fixed light set, an explorer spotlight, and no real-time shadow maps.
+
+The whole bounded cave is loaded. Fog and passage bends provide depth. No streaming, custom occlusion, or frame-rate guarantee is claimed.

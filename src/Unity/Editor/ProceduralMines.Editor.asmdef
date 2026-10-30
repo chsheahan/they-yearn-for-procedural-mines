@@ -1,0 +1,5 @@
+{
+  "name": "ProceduralMines.Editor",
+  "references": ["ProceduralMines.Core", "ProceduralMines.Unity"],
+  "includePlatforms": ["Editor"]
+}

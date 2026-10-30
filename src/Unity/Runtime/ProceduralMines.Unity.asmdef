@@ -1,0 +1,5 @@
+{
+  "name": "ProceduralMines.Unity",
+  "rootNamespace": "ProceduralMines.Unity",
+  "references": ["ProceduralMines.Core"]
+}

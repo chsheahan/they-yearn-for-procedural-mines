@@ -1,0 +1,10 @@
+{
+  "name": "com.chsheahan.procedural-mines.unity",
+  "version": "0.1.0",
+  "displayName": "Procedural Mines Unity",
+  "description": "Unity mesh, collision, exploration, and editor integration for Procedural Mines.",
+  "unity": "6000.0",
+  "license": "MIT",
+  "author": { "name": "Christopher Hugh Sheahan" },
+  "dependencies": { "com.chsheahan.procedural-mines.core": "0.1.0" }
+}
